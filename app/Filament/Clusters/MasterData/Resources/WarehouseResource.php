@@ -4,15 +4,12 @@ namespace App\Filament\Clusters\MasterData\Resources;
 
 use App\Filament\Clusters\MasterData;
 use App\Filament\Clusters\MasterData\Resources\WarehouseResource\Pages;
-use App\Filament\Clusters\MasterData\Resources\WarehouseResource\RelationManagers;
 use App\Models\Warehouse;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class WarehouseResource extends Resource
 {

@@ -4,15 +4,12 @@ namespace App\Filament\Clusters\MasterData\Resources;
 
 use App\Filament\Clusters\MasterData;
 use App\Filament\Clusters\MasterData\Resources\UomResource\Pages;
-use App\Filament\Clusters\MasterData\Resources\UomResource\RelationManagers;
 use App\Models\Uom;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UomResource extends Resource
 {

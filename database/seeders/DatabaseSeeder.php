@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
                 'product_category_id' => ProductCategory::query()
                     ->first()
                     ->id,
-                'type' => ProductType::RAW
+                'type' => ProductType::RAW,
             ]);
 
         Warehouse::query()

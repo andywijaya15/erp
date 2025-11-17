@@ -2,17 +2,14 @@
 
 namespace App\Filament\Clusters\MasterData\Resources;
 
-use Filament\Forms;
-use Filament\Tables;
-use App\Models\Customer;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
 use App\Filament\Clusters\MasterData;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Clusters\MasterData\Resources\CustomerResource\Pages;
-use App\Filament\Clusters\MasterData\Resources\CustomerResource\RelationManagers;
+use App\Models\Customer;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
 
 class CustomerResource extends Resource
 {
@@ -78,7 +75,7 @@ class CustomerResource extends Resource
 
                 Tables\Columns\TextColumn::make('type')
                     ->label('Type')
-                    ->formatStateUsing(fn($state) => \App\Enums\CustomerType::from($state)->label())
+                    ->formatStateUsing(fn ($state) => \App\Enums\CustomerType::from($state)->label())
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('phone')

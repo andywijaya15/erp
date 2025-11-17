@@ -5,8 +5,8 @@ namespace App\Enums;
 enum CustomerType: string
 {
     case REGULAR = 'REGULAR';
-    case WHOLESALE = 'WHOLESALE'; //Grosir
-    case ONLINE = 'ONLINE'; //ecommerce
+    case WHOLESALE = 'WHOLESALE'; // Grosir
+    case ONLINE = 'ONLINE'; // ecommerce
     case DISTRIBUTOR = 'DISTRIBUTOR';
     case INTERNAL = 'INTERNAL';
 
@@ -24,7 +24,7 @@ enum CustomerType: string
     public static function options(): array
     {
         return collect(self::cases())
-            ->mapWithKeys(fn($case) => [$case->value => $case->label()])
+            ->mapWithKeys(fn ($case) => [$case->value => $case->label()])
             ->toArray();
     }
 }

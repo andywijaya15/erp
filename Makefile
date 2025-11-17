@@ -8,3 +8,6 @@ migrate:
 
 seed:
 	php artisan db:seed
+
+pint:
+	./vendor/bin/pint

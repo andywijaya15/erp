@@ -4,15 +4,12 @@ namespace App\Filament\Clusters\MasterData\Resources;
 
 use App\Filament\Clusters\MasterData;
 use App\Filament\Clusters\MasterData\Resources\ProductCategoryResource\Pages;
-use App\Filament\Clusters\MasterData\Resources\ProductCategoryResource\RelationManagers;
 use App\Models\ProductCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProductCategoryResource extends Resource
 {
@@ -44,7 +41,7 @@ class ProductCategoryResource extends Resource
                         Forms\Components\Toggle::make('is_active')
                             ->default(true),
                     ])
-                    ->columns(2)
+                    ->columns(2),
             ]);
     }
 

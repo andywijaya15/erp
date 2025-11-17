@@ -4,15 +4,12 @@ namespace App\Filament\Clusters\MasterData\Resources;
 
 use App\Filament\Clusters\MasterData;
 use App\Filament\Clusters\MasterData\Resources\AreaResource\Pages;
-use App\Filament\Clusters\MasterData\Resources\AreaResource\RelationManagers;
 use App\Models\Area;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AreaResource extends Resource
 {

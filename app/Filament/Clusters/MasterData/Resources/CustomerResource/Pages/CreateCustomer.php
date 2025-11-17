@@ -3,7 +3,6 @@
 namespace App\Filament\Clusters\MasterData\Resources\CustomerResource\Pages;
 
 use App\Filament\Clusters\MasterData\Resources\CustomerResource;
-use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateCustomer extends CreateRecord

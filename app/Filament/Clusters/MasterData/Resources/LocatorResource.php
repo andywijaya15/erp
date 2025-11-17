@@ -2,19 +2,16 @@
 
 namespace App\Filament\Clusters\MasterData\Resources;
 
-use Filament\Forms;
-use App\Models\Area;
-use Filament\Tables;
-use App\Models\Locator;
-use Filament\Forms\Form;
-use App\Models\Warehouse;
-use Filament\Tables\Table;
-use Filament\Resources\Resource;
 use App\Filament\Clusters\MasterData;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Clusters\MasterData\Resources\LocatorResource\Pages;
-use App\Filament\Clusters\MasterData\Resources\LocatorResource\RelationManagers;
+use App\Models\Area;
+use App\Models\Locator;
+use App\Models\Warehouse;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
 
 class LocatorResource extends Resource
 {
@@ -38,9 +35,10 @@ class LocatorResource extends Resource
                     ->required()
                     ->options(function (callable $get) {
                         $warehouseId = $get('warehouse_id');
-                        if (!$warehouseId) {
+                        if (! $warehouseId) {
                             return [];
                         }
+
                         return Area::where('warehouse_id', $warehouseId)->pluck('name', 'id');
                     }),
                 Forms\Components\TextInput::make('code')->required(),
