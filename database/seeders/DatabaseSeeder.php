@@ -3,10 +3,16 @@
 namespace Database\Seeders;
 
 use App\Actions\GenerateCode;
+use App\Enums\CustomerType;
 use App\Enums\ProductType;
 use App\Enums\SupplierType;
+use App\Models\Area;
+use App\Models\Customer;
+use App\Models\Locator;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\PurchaseOrder;
+use App\Models\PurchaseOrderLine;
 use App\Models\Supplier;
 use App\Models\Uom;
 use App\Models\User;
@@ -22,17 +28,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::query()
             ->create([
                 'name' => 'admin',
+                'username' => 'admin',
                 'email' => 'admin@mail.com',
                 'password' => Hash::make('admin'),
                 'email_verified_at' => now(),
             ]);
 
-        $pc = ProductCategory::query()
+        $productCategory = ProductCategory::query()
             ->create([
                 'code' => GenerateCode::execute('PC-'),
                 'name' => 'KATEGORI 1',
@@ -44,26 +49,62 @@ class DatabaseSeeder extends Seeder
                 'name' => 'uom 1',
             ]);
 
-        Product::query()
+        $product = Product::query()
             ->create([
                 'code' => GenerateCode::execute('PRD-'),
                 'name' => 'BARANG 1',
                 'uom_id' => $uom->id,
-                'product_category_id' => $pc->id,
+                'product_category_id' => $productCategory->id,
                 'type' => ProductType::RAW,
             ]);
 
-        Supplier::query()
+        $supplier = Supplier::query()
             ->create([
                 'code' => GenerateCode::execute('SUP-'),
                 'name' => 'SUPPLIER 1',
                 'type' => SupplierType::LOCAL,
             ]);
 
-        Warehouse::query()
+        $warehouse = Warehouse::query()
             ->create([
                 'code' => GenerateCode::execute('WH-'),
                 'name' => 'WAREHOUSE 1',
+            ]);
+
+        $area = Area::query()
+            ->create([
+                'code' => GenerateCode::execute('A-'),
+                'warehouse_id' => $warehouse->id,
+                'name' => 'AREA 1',
+            ]);
+
+        Locator::query()
+            ->create([
+                'code' => GenerateCode::execute('L-'),
+                'area_id' => $area->id,
+                'name' => 'LOCATOR 1',
+            ]);
+
+        Customer::query()
+            ->create([
+                'code' => GenerateCode::execute('C-'),
+                'name' => 'CUSTOMER 1',
+                'type' => CustomerType::REGULAR
+            ]);
+
+        $purchaseOrder = PurchaseOrder::query()
+            ->create([
+                'supplier_id' => $supplier->id,
+                'order_date' => now()->toDateTimeString(),
+                'delivery_date' => now()->addDays(3)->toDateTimeString(),
+            ]);
+
+        PurchaseOrderLine::query()
+            ->create([
+                'purchase_order_id' => $purchaseOrder->id,
+                'product_id' => $product->id,
+                'qty' => 10,
+                'price' => 1000
             ]);
     }
 }
