@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Actions\GenerateCode;
 use App\Enums\CustomerType;
 use App\Enums\ProductType;
+use App\Enums\PurchaseOrderStatus;
 use App\Enums\SupplierType;
 use App\Models\Area;
 use App\Models\Customer;
@@ -106,5 +107,8 @@ class DatabaseSeeder extends Seeder
                 'qty' => 10,
                 'price' => 1000
             ]);
+
+        $purchaseOrder->status = PurchaseOrderStatus::CONFIRMED;
+        $purchaseOrder->save();
     }
 }

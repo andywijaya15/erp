@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\PurchaseOrder;
+use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -20,7 +21,8 @@ return new class extends Migration
             $table->foreignIdFor(User::class, 'created_by')->constrained();
             $table->foreignIdFor(User::class, 'updated_by')->constrained();
             $table->foreignIdFor(User::class, 'deleted_by')->nullable()->constrained();
-            $table->foreignIdFor(PurchaseOrder::class)->constrained();
+            $table->foreignIdFor(Supplier::class)->constrained();
+            $table->foreignIdFor(PurchaseOrder::class)->nullable()->constrained();
             $table->date('receipt_date');
             $table->string('status');
             $table->text('notes')->nullable();
