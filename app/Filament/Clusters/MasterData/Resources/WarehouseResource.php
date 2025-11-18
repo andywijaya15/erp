@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\MasterData\Resources;
 
+use App\Actions\GenerateCode;
 use App\Filament\Clusters\MasterData;
 use App\Filament\Clusters\MasterData\Resources\WarehouseResource\Pages;
 use App\Models\Warehouse;
@@ -23,21 +24,31 @@ class WarehouseResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('code')
-                    ->label('Code')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(50),
+                Forms\Components\Section::make('Warehouse Information')
+                    ->schema([
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                Forms\Components\Hidden::make('code')
+                                    ->default(fn () => GenerateCode::execute('WH-'))
+                                    ->dehydrated(fn ($record) => $record === null),
 
-                Forms\Components\TextInput::make('name')
-                    ->label('Name')
-                    ->required()
-                    ->maxLength(150),
+                                Forms\Components\TextInput::make('code')
+                                    ->label('Code')
+                                    ->visible(fn ($record) => $record !== null)
+                                    ->disabled()
+                                    ->dehydrated(false),
 
-                Forms\Components\TextInput::make('address')
-                    ->label('Address')
-                    ->required()
-                    ->maxLength(150),
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Name')
+                                    ->required()
+                                    ->maxLength(150),
+
+                                Forms\Components\TextInput::make('address')
+                                    ->label('Address')
+                                    ->required()
+                                    ->maxLength(150),
+                            ]),
+                    ]),
             ]);
     }
 

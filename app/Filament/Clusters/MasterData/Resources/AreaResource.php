@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\MasterData\Resources;
 
+use App\Actions\GenerateCode;
 use App\Filament\Clusters\MasterData;
 use App\Filament\Clusters\MasterData\Resources\AreaResource\Pages;
 use App\Models\Area;
@@ -23,12 +24,25 @@ class AreaResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('warehouse_id')
-                    ->relationship('warehouse', 'name')
-                    ->required(),
-                Forms\Components\TextInput::make('code')->required(),
-                Forms\Components\TextInput::make('name')->required(),
-                Forms\Components\Toggle::make('is_active')->default(true),
+                Forms\Components\Section::make('Area Information')
+                    ->schema([
+                        Forms\Components\Hidden::make('code')
+                            ->default(fn () => GenerateCode::execute('A-'))
+                            ->dehydrated(fn ($record) => $record === null),
+
+                        Forms\Components\TextInput::make('code')
+                            ->label('Code')
+                            ->visible(fn ($record) => $record !== null)
+                            ->disabled()
+                            ->dehydrated(false),
+                        Forms\Components\Select::make('warehouse_id')
+                            ->relationship('warehouse', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+                        Forms\Components\TextInput::make('name')->required(),
+                        Forms\Components\Toggle::make('is_active')->default(true),
+                    ]),
             ]);
     }
 
@@ -36,9 +50,13 @@ class AreaResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('warehouse.name')->label('Warehouse'),
-                Tables\Columns\TextColumn::make('code'),
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('warehouse.name')
+                    ->label('Warehouse')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('code')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean(),
             ])
             ->filters([

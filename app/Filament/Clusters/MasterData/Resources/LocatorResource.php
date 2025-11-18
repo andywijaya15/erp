@@ -25,26 +25,41 @@ class LocatorResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('warehouse_id')
-                    ->label('Warehouse')
-                    ->options(Warehouse::query()->where('is_active', true)->pluck('name', 'id'))
-                    ->dehydrated(false)
-                    ->reactive()
-                    ->afterStateUpdated(fn ($state, callable $set) => $set('area_id', null)),
-                Forms\Components\Select::make('area_id')
-                    ->label('Area')
-                    ->required()
-                    ->options(function (callable $get) {
-                        $warehouseId = $get('warehouse_id');
-                        if (! $warehouseId) {
-                            return [];
-                        }
+                Forms\Components\Section::make('Locator Information')
+                    ->schema([
+                        Forms\Components\Hidden::make('code')
+                            ->default(fn () => GenerateCode::execute('L-'))
+                            ->dehydrated(fn ($record) => $record === null),
 
-                        return Area::where('warehouse_id', $warehouseId)->pluck('name', 'id');
-                    }),
-                Forms\Components\TextInput::make('code')->required(),
-                Forms\Components\TextInput::make('name')->required(),
-                Forms\Components\Toggle::make('is_active')->default(true),
+                        Forms\Components\TextInput::make('code')
+                            ->label('Code')
+                            ->visible(fn ($record) => $record !== null)
+                            ->disabled()
+                            ->dehydrated(false),
+
+                        Forms\Components\Select::make('warehouse_id')
+                            ->label('Warehouse')
+                            ->options(Warehouse::query()->where('is_active', true)->pluck('name', 'id'))
+                            ->dehydrated(false)
+                            ->searchable()
+                            ->preload()
+                            ->reactive()
+                            ->afterStateUpdated(fn ($state, callable $set) => $set('area_id', null)),
+                        Forms\Components\Select::make('area_id')
+                            ->label('Area')
+                            ->required()
+                            ->searchable()
+                            ->options(function (callable $get) {
+                                $warehouseId = $get('warehouse_id');
+                                if (! $warehouseId) {
+                                    return [];
+                                }
+
+                                return Area::where('warehouse_id', $warehouseId)->pluck('name', 'id');
+                            }),
+                        Forms\Components\TextInput::make('name')->required(),
+                        Forms\Components\Toggle::make('is_active')->default(true),
+                    ]),
             ]);
     }
 
@@ -52,10 +67,16 @@ class LocatorResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('area.warehouse.name')->label('Warehouse'),
-                Tables\Columns\TextColumn::make('area.name')->label('Area'),
-                Tables\Columns\TextColumn::make('code'),
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('area.warehouse.name')
+                    ->label('Warehouse')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('area.name')
+                    ->label('Area')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('code')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean(),
             ])
             ->filters([

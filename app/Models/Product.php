@@ -16,7 +16,7 @@ class Product extends Model
         return $this->belongsTo(Uom::class);
     }
 
-    public function category()
+    public function productCategory()
     {
         return $this->belongsTo(ProductCategory::class);
     }

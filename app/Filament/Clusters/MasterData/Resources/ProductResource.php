@@ -2,14 +2,16 @@
 
 namespace App\Filament\Clusters\MasterData\Resources;
 
+use Filament\Forms;
+use Filament\Tables;
+use App\Models\Product;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use App\Actions\GenerateCode;
+use App\Enums\ProductType;
+use Filament\Resources\Resource;
 use App\Filament\Clusters\MasterData;
 use App\Filament\Clusters\MasterData\Resources\ProductResource\Pages;
-use App\Models\Product;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
 
 class ProductResource extends Resource
 {
@@ -23,30 +25,51 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('code')
-                    ->label('Product Code')
-                    ->required()
-                    ->maxLength(50)
-                    ->unique(ignoreRecord: true)
-                    ->columnSpan(2),
+                Forms\Components\Section::make('Product Information')
+                    ->schema([
+                        Forms\Components\Hidden::make('code')
+                            ->default(fn() => GenerateCode::execute('PRD-'))
+                            ->dehydrated(fn($record) => $record === null),
 
-                Forms\Components\TextInput::make('name')
-                    ->label('Product Name')
-                    ->required()
-                    ->maxLength(255)
-                    ->columnSpan(2),
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                Forms\Components\TextInput::make('code')
+                                    ->label('Code')
+                                    ->visible(fn($record) => $record !== null)
+                                    ->disabled()
+                                    ->dehydrated(false),
 
-                Forms\Components\Select::make('uom_id')
-                    ->label('UOM')
-                    ->relationship('uom', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->required(),
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Product Name')
+                                    ->required(),
 
-                Forms\Components\Toggle::make('is_active')
-                    ->label('Active')
-                    ->default(true)
-                    ->columnSpan(1),
+                                Forms\Components\Select::make('type')
+                                    ->label('Type')
+                                    ->options(ProductType::options())
+                                    ->disabled(fn($record) => $record !== null),
+
+                                Forms\Components\Select::make('product_category_id')
+                                    ->label('Category')
+                                    ->relationship('productCategory', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->required(),
+
+                                Forms\Components\Select::make('uom_id')
+                                    ->label('UOM')
+                                    ->relationship('uom', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->required(),
+
+
+                                Forms\Components\Toggle::make('is_active')
+                                    ->label('Active')
+                                    ->default(true)
+                                    ->columnSpan(1),
+                            ]),
+
+                    ]),
             ]);
     }
 
